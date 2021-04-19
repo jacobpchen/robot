@@ -41,20 +41,23 @@ void drawCube() {
 // Draws right arm, hand, leg, and foot
 //
 void drawRightSideAppendages(int z)
-{
+{	
 	glPushMatrix(); // right arm
+	setMaterial(0.24725, 0.1995, 0.0745, 0.75164, 0.60648, 0.22648, 0.628281, 0.555802, 0.366065, 0.4); // gold
 	glTranslatef(0.40f, 0.7f, 0.0f);
 	glRotatef(35, 0, 0, 1);
 	glScalef(0.5f, 4.0f, 0.5f);
 	drawSphere();
 	glPopMatrix();
 	glPushMatrix(); // right hand
+	setMaterial(0.19225, 0.19225, 0.19225, 0.50754, 0.50754, 0.50754, 0.508273, 0.508273, 0.508273, 0.4); // silver
 	glTranslatef(0.69f, 0.28f, 0.0f);
 	glRotatef(z, 0, 0, 1);
 	//drawSphere();
 	drawCube();
 	glPopMatrix();
 	glPushMatrix(); // right thigh
+	setMaterial(0.24725, 0.1995, 0.0745, 0.75164, 0.60648, 0.22648, 0.628281, 0.555802, 0.366065, 0.4); // gold
 	glTranslatef(0.2f, -0.4f, 0.0f);
 	glRotatef(15, 0, 0, 1);
 	glScalef(0.5f, 3.0f, 0.5f);
@@ -67,6 +70,7 @@ void drawRightSideAppendages(int z)
 	drawSphere();
 	glPopMatrix();
 	glPushMatrix(); // right foot
+	setMaterial(0.19225, 0.19225, 0.19225, 0.50754, 0.50754, 0.50754, 0.508273, 0.508273, 0.508273, 0.4); // silver
 	glTranslatef(0.33f, -1.40f, 0.0f);
 	glRotatef(z, 0, 0, 1);
 	//drawSphere();
@@ -85,16 +89,19 @@ void drawRobot()
 	glMatrixMode(GL_MODELVIEW);
 
 	glPushMatrix(); // head
+	setMaterial(0.25, 0.20725, 0.20725, 1, 0.829, 0.829, 0.296648, 0.296648, 0.296648, 0.088); // pearl
 	glTranslatef(0.0f, 1.5f, 0.0f);
 	glScalef(3.0f, 3.0f, 3.0f);
 	drawSphere();
 	glPopMatrix();
 
 	glPushMatrix(); // body
+	setMaterial(0.135, 0.2225, 0.1575, 0.54 , 0.89, 0.63, .316228, 0.316228, 0.316228, 0.1); // jade
 	glTranslatef(0.0f, 0.5f, 0.0f);
 	glScalef(2.5f, 7.0f, 2.5f);
 	drawSphere();
 	glPopMatrix();
+
 	drawRightSideAppendages(z);
 	// use reflection to draw the left side appendages
 	//
