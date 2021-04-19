@@ -19,14 +19,28 @@ void setMaterial(GLfloat ambientR, GLfloat ambientG, GLfloat ambientB,
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 }
 
+void timer(int value) {
+	float angle = 0;
+	angle += 1.0f;
+	if (angle > 360)
+		angle -= 360;
+	glutPostRedisplay();
+	glutTimerFunc(100, timer, 0);
+}
+
 void drawSphere()
 {
 	glutSolidSphere(.1, 16, 16);
 }
 
+void drawCube() {
+	glutSolidCube(.1);
+}
+
+
 // Draws right arm, hand, leg, and foot
 //
-void drawRightSideAppendages()
+void drawRightSideAppendages(int z)
 {
 	glPushMatrix(); // right arm
 	glTranslatef(0.40f, 0.7f, 0.0f);
@@ -36,8 +50,9 @@ void drawRightSideAppendages()
 	glPopMatrix();
 	glPushMatrix(); // right hand
 	glTranslatef(0.69f, 0.28f, 0.0f);
-	//glRotatef(feetAndHandsRotation[Z], 0, 0, 1);
-	drawSphere();
+	glRotatef(z, 0, 0, 1);
+	//drawSphere();
+	drawCube();
 	glPopMatrix();
 	glPushMatrix(); // right thigh
 	glTranslatef(0.2f, -0.4f, 0.0f);
@@ -53,10 +68,12 @@ void drawRightSideAppendages()
 	glPopMatrix();
 	glPushMatrix(); // right foot
 	glTranslatef(0.33f, -1.40f, 0.0f);
-	//glRotatef(feetAndHandsRotation[Z], 0, 0, 1);
-	drawSphere();
-	glPopMatrix();
+	glRotatef(z, 0, 0, 1);
+	//drawSphere();
+	drawCube();
+	glPopMatrix();	
 } 
+
 // drawRightSideAppendages
 // draws the desired robot object
 //
@@ -72,19 +89,22 @@ void drawRobot()
 	glScalef(3.0f, 3.0f, 3.0f);
 	drawSphere();
 	glPopMatrix();
+
 	glPushMatrix(); // body
 	glTranslatef(0.0f, 0.5f, 0.0f);
 	glScalef(2.5f, 7.0f, 2.5f);
 	drawSphere();
 	glPopMatrix();
-	drawRightSideAppendages();
+	drawRightSideAppendages(z);
 	// use reflection to draw the left side appendages
 	//
 	glPushMatrix();
 	glScalef(-1.0, 1.0, 1.0);
-	drawRightSideAppendages();
+	drawRightSideAppendages(z);
 	glPopMatrix();
 
+	//glRotatef(10, 0, .2, 0);	// rotate whole robot
+	z += 10;
 	glFlush();
 }
 
@@ -126,6 +146,6 @@ void main(int argc, char** argv)
 	glClearColor(0.1f, 0.1f, 0.1f, 0.0f); // background is light gray
 	glViewport(0, 0, 640, 480);
 	
-
+	glutTimerFunc(1400, timer, 1);
 	glutMainLoop();
 }
