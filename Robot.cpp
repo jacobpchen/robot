@@ -1,8 +1,20 @@
 #include <Windows.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <string>
+#include <iostream>
 
+using namespace std;
+
+// Global vars
 double x, y, z;           // current robot position (initialized in main)
+
+// Handle the menu choice
+int state;
+
+// Smooth vs flat
+
+
 
 void setMaterial(GLfloat ambientR, GLfloat ambientG, GLfloat ambientB,
 	GLfloat diffuseR, GLfloat diffuseG, GLfloat diffuseB,
@@ -36,6 +48,15 @@ void drawSphere()
 void drawCube() {
 	glutSolidCube(.1);
 }
+
+void drawCone() {
+	glRotatef(270, 1, 0, 0);
+	glutSolidCone(.2, .5, 20, 20);
+}
+
+
+
+
 
 
 // Draws right arm, hand, leg, and foot
@@ -115,9 +136,127 @@ void drawRobot()
 	glFlush();
 }
 
+void drawRobotNoRotation() {
+	/* clear window */
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/* future matrix manipulations should affect the modelview matrix */
+	glMatrixMode(GL_MODELVIEW);
+
+	glPushMatrix(); // head
+	setMaterial(0.25, 0.20725, 0.20725, 1, 0.829, 0.829, 0.296648, 0.296648, 0.296648, 0.088); // pearl
+	glTranslatef(0.0f, 1.5f, 0.0f);
+	glScalef(3.0f, 3.0f, 3.0f);
+	drawSphere();
+	glPopMatrix();
+
+	glPushMatrix(); // body
+	setMaterial(0.135, 0.2225, 0.1575, 0.54, 0.89, 0.63, .316228, 0.316228, 0.316228, 0.1); // jade
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	glScalef(2.5f, 7.0f, 2.5f);
+	drawSphere();
+	glPopMatrix();
+
+	drawRightSideAppendages(z);
+	// use reflection to draw the left side appendages
+	//
+	glPushMatrix();
+	glScalef(-1.0, 1.0, 1.0);
+	drawRightSideAppendages(z);
+	glPopMatrix();
+
+	//glRotatef(10, 0, .2, 0);	// rotate whole robot
+	z += 0;
+	glFlush();
+}
+
+void drawPartyHatRobot() {
+	/* clear window */
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/* future matrix manipulations should affect the modelview matrix */
+	glMatrixMode(GL_MODELVIEW);
+
+	glPushMatrix(); // head
+	setMaterial(0.25, 0.20725, 0.20725, 1, 0.829, 0.829, 0.296648, 0.296648, 0.296648, 0.088); // pearl
+	glTranslatef(0.0f, 1.5f, 0.0f);
+	glScalef(3.0f, 3.0f, 3.0f);
+	drawSphere();
+	glPopMatrix();
+	
+	glPushMatrix(); // party hat
+	setMaterial(0.05, 0.0, 0.0, 0.5, 0.4, 0.4, 0.7, 0.04, 0.04, .078125);	// red plastic
+	glTranslatef(0.0f, 1.75f, 0.0f);
+	glScalef(1, 1, 1);
+	drawCone();
+	glPopMatrix();
+
+	glPushMatrix(); // body
+	setMaterial(0.135, 0.2225, 0.1575, 0.54, 0.89, 0.63, .316228, 0.316228, 0.316228, 0.1); // jade
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	glScalef(2.5f, 7.0f, 2.5f);
+	drawSphere();
+	glPopMatrix();
+
+	drawRightSideAppendages(z);
+	// use reflection to draw the left side appendages
+	//
+	glPushMatrix();
+	glScalef(-1.0, 1.0, 1.0);
+	drawRightSideAppendages(z);
+	glPopMatrix();
+
+	glRotatef(10, 0, 1, 0);
+	
+	glFlush();
+}
+
 void reshape(int width, int height) {
 	/* define the viewport transformation */
 	glViewport(0, 0, width, height);
+}
+
+void mainMenuHandler(int choice) {
+	switch (choice) {
+	case 1:
+		state = 1;
+		//drawRobot();
+		cout << state << endl;
+		break;
+	case 2:
+		state = 2;
+		//drawRobotNoRotation();
+		break;
+	case 3:
+		state = 3;
+		//drawPartyHatRobot();
+		break;
+	case 4:
+		state = 4;
+		break;
+	case 5:
+		state = 5;
+		break;
+	}
+}
+
+
+void display(void) {
+	//drawRobot();
+	//drawRobotNoRotation();
+	//drawPartyHatRobot();
+
+	if (state == 1)
+		drawRobot();
+	else if (state == 2)
+		drawRobotNoRotation();
+	else if (state == 3)
+		drawPartyHatRobot();
+	else if (state == 4)
+		glShadeModel(GL_SMOOTH);
+	else if (state == 5)
+		glShadeModel(GL_FLAT);
+	else
+		drawRobot();
+	
 }
 
 //<<<<<<<<<<<<<<<<<<<<<< main >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -128,7 +267,7 @@ void main(int argc, char** argv)
 	glutInitWindowSize(640, 480);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Robot");
-	glutDisplayFunc(drawRobot);
+	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	/* set up depth-buffering */
 	glEnable(GL_DEPTH_TEST);
@@ -147,12 +286,27 @@ void main(int argc, char** argv)
 	
 	glEnable(GL_LIGHTING); // enable the light source
 	glEnable(GL_LIGHT0);
-	glShadeModel(GL_SMOOTH);
+	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST); // for hidden surface removal
 	glEnable(GL_NORMALIZE); // normalize vectors for proper shading
 	glClearColor(0.1f, 0.1f, 0.1f, 0.0f); // background is light gray
 	glViewport(0, 0, 640, 480);
 	
+	glutCreateMenu(mainMenuHandler);
+	//glutAddSubMenu("Change Color", subMenu);
+	glutAddMenuEntry("Hands and Feet Rotation", 1);
+	glutAddMenuEntry("Stop Rotation", 2);
+	glutAddMenuEntry("Party Mode!", 3);
+	glutAddMenuEntry("Smooth Shading Model", 4);
+	glutAddMenuEntry("Flat Shading Model", 4);
+	glutAddMenuEntry("Exit", 5);
+
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+
 	glutTimerFunc(1400, timer, 1);
+
+
+
 	glutMainLoop();
 }
