@@ -271,9 +271,24 @@ void main(int argc, char** argv)
 	glutReshapeFunc(reshape);
 	/* set up depth-buffering */
 	glEnable(GL_DEPTH_TEST);
+
 	/* turn on default lighting */
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+
+	GLfloat lightpos[] = { 0.0, 0.0, -4.0 };
+	GLfloat lightcolor[] = { 1.0, 1.0, 1.0 };
+	GLfloat ambcolor[] = { 0.0, 0.0, 1.0 };
+
+	glEnable(GL_LIGHTING);                               // enable lighting
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambcolor);     // ambient light
+
+	glEnable(GL_LIGHT0);                                 // enable light source
+	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);           // config light source
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lightcolor);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightcolor);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, lightcolor);
+
 	/* define the projection transformation */
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -283,9 +298,6 @@ void main(int argc, char** argv)
 	glLoadIdentity();
 	gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-	
-	glEnable(GL_LIGHTING); // enable the light source
-	glEnable(GL_LIGHT0);
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST); // for hidden surface removal
 	glEnable(GL_NORMALIZE); // normalize vectors for proper shading
@@ -298,8 +310,8 @@ void main(int argc, char** argv)
 	glutAddMenuEntry("Stop Rotation", 2);
 	glutAddMenuEntry("Party Mode!", 3);
 	glutAddMenuEntry("Smooth Shading Model", 4);
-	glutAddMenuEntry("Flat Shading Model", 4);
-	glutAddMenuEntry("Exit", 5);
+	glutAddMenuEntry("Flat Shading Model", 5);
+	glutAddMenuEntry("Exit", 6);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
