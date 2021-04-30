@@ -12,10 +12,6 @@ double x, y, z;           // current robot position (initialized in main)
 // Handle the menu choice
 int state;
 
-// Smooth vs flat
-
-
-
 void setMaterial(GLfloat ambientR, GLfloat ambientG, GLfloat ambientB,
 	GLfloat diffuseR, GLfloat diffuseG, GLfloat diffuseB,
 	GLfloat specularR, GLfloat specularG, GLfloat specularB,
@@ -53,10 +49,6 @@ void drawCone() {
 	glRotatef(270, 1, 0, 0);
 	glutSolidCone(.2, .5, 20, 20);
 }
-
-
-
-
 
 
 // Draws right arm, hand, leg, and foot
@@ -218,16 +210,12 @@ void mainMenuHandler(int choice) {
 	switch (choice) {
 	case 1:
 		state = 1;
-		//drawRobot();
-		cout << state << endl;
 		break;
 	case 2:
 		state = 2;
-		//drawRobotNoRotation();
 		break;
 	case 3:
 		state = 3;
-		//drawPartyHatRobot();
 		break;
 	case 4:
 		state = 4;
@@ -240,10 +228,6 @@ void mainMenuHandler(int choice) {
 
 
 void display(void) {
-	//drawRobot();
-	//drawRobotNoRotation();
-	//drawPartyHatRobot();
-
 	if (state == 1)
 		drawRobot();
 	else if (state == 2)
@@ -256,7 +240,6 @@ void display(void) {
 		glShadeModel(GL_FLAT);
 	else
 		drawRobot();
-	
 }
 
 //<<<<<<<<<<<<<<<<<<<<<< main >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -276,7 +259,7 @@ void main(int argc, char** argv)
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
-	GLfloat lightpos[] = { 0.0, 0.0, -4.0 };
+	GLfloat lightpos[] = { 0.0, 0.0, 15.0 };
 	GLfloat lightcolor[] = { 1.0, 1.0, 1.0 };
 	GLfloat ambcolor[] = { 0.0, 0.0, 1.0 };
 
@@ -305,7 +288,6 @@ void main(int argc, char** argv)
 	glViewport(0, 0, 640, 480);
 	
 	glutCreateMenu(mainMenuHandler);
-	//glutAddSubMenu("Change Color", subMenu);
 	glutAddMenuEntry("Hands and Feet Rotation", 1);
 	glutAddMenuEntry("Stop Rotation", 2);
 	glutAddMenuEntry("Party Mode!", 3);
